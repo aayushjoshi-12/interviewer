@@ -1,0 +1,12 @@
+### TODO:
+- [ ] use chat history in experience interview
+- [ ] fix the fileInput thing for the resume
+- [ ] support for other multiple file formats like pdf docx
+- [ ] description to all the endpoints and api documentation
+- [ ] improve all prompts
+- [ ] create docker image
+- [ ] change the db uri for prod to the internal link when hosting on render
+- [ ] end convo directly using the user input
+- [ ] getter function for all imports
+- [ ] implement feature for changing model
+- [ ] give llm the entire ability to parse the resume and break it down in whatever parts he feels suitable and then make decisions accordingly

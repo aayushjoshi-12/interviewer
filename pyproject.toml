@@ -1,15 +1,18 @@
 [project]
-name = "interviewer-backend"
+name = "interviewer"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "fastapi>=0.115.11",
-    "langchain>=0.3.20",
-    "langchain-community>=0.3.19",
-    "langchain-groq>=0.2.5",
-    "langgraph>=0.3.5",
+    "fastapi>=0.115.12",
+    "langchain>=0.3.21",
+    "langchain-community>=0.3.20",
+    "langchain-groq>=0.3.1",
+    "langgraph>=0.3.20",
+    "langgraph-checkpoint-postgres>=2.0.19",
+    "psycopg-binary>=3.2.6",
+    "psycopg-pool>=3.2.6",
     "pymupdf>=1.25.4",
     "uvicorn>=0.34.0",
 ]
@@ -18,5 +21,6 @@ dependencies = [
 dev = [
     "ipykernel>=6.29.5",
     "pypdf>=5.4.0",
+    "pypdf2>=3.0.1",
+    "streamlit>=1.43.2",
 ]
-

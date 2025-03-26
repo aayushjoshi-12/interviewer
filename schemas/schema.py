@@ -1,5 +1,6 @@
-from fastapi import UploadFile
+from langchain_core.messages import BaseMessage
 from pydantic import BaseModel, Field
+from fastapi import UploadFile
 
 
 class StartInput(BaseModel):
@@ -12,7 +13,9 @@ class StartInput(BaseModel):
             "Software Engineer at Google...",
         ],
     )
-    resume: UploadFile | str = Field(description="Resume file in PDF format or as plain text")
+    resume: UploadFile | str = Field(
+        description="Resume file in PDF format or as plain text"
+    )
     thread_id: str | None = Field(
         description="Thread ID to persist and continue a multi-turn conversation.",
         default=None,
@@ -42,10 +45,22 @@ class UserInput(BaseModel):
     # )
 
 
-class StreamInput(UserInput):
-    """User input for streaming the agent's response."""
+class ChatHistoryInput(BaseModel):
+    """Input for retrieving chat history."""
 
-    stream_tokens: bool = Field(
-        description="Whether to stream LLM tokens to the client.",
-        default=True,
+    thread_id: str = Field(
+        description="Thread ID to persist and continue a multi-turn conversation.",
+        examples=["847c6285-8fc9-4560-a83f-4e6285809254"],
     )
+
+
+class StateInput(BaseModel):
+    """Input for retrieving state of the conversation."""
+
+    thread_id: str = Field(
+        description="Thread ID to persist and continue a multi-turn conversation.",
+        examples=["847c6285-8fc9-4560-a83f-4e6285809254"],
+    )
+
+class ChatHistory(BaseModel):
+    messages: list[BaseMessage]

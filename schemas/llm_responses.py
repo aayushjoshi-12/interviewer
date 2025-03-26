@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 
 from pydantic import BaseModel, Field
 
@@ -51,12 +51,13 @@ class ExperienceInterviewScore(BaseModel):
     score: int = Field(description="The score of the candidate's response.")
 
 
-class ExperienceInterviewResponse(BaseModel):
+class ExperienceInterviewQuestion(BaseModel):
     """Schema for an experience interview."""
 
-    response: str | ExperienceInterviewScore = Field(
+    response: Union[str, ExperienceInterviewScore] = Field(
         description=(
             "The question you want to ask. If you want to stop the conversation, "
-            "provide the score using the schema for experience interview score."
+            "provide the score to candidate's responses using the Experience "
+            "Interview score schema."
         )
     )

@@ -16,9 +16,8 @@ from schemas.llm_responses import (
 )
 
 # TODO: improve all prompts
-# TODO: the model is going to get deprecated soon so look for alternates that perform well.
 # TODO: rather than importing all the prompts create a getter function
-llm = ChatGroq(model="mixtral-8x7b-32768")
+llm = ChatGroq(model="llama-3.3-70b-specdec")
 
 resume_breaker = resume_breaker_prompt | llm.with_structured_output(Resume)
 

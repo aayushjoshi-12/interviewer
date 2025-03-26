@@ -1,6 +1,7 @@
-def main():
-    print("Hello from interviewer-backend!")
+import uvicorn
+from dotenv import load_dotenv
 
+load_dotenv(override=True)
 
 if __name__ == "__main__":
-    main()
+    uvicorn.run("service:app", host="0.0.0.0", port=8000, reload=True)

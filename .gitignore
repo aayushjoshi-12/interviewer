@@ -12,12 +12,10 @@ wheels/
 # Environment variables
 .env
 
-# Jupyter Notebook
-.ipynb_checkpoints/
-# notebooks
-
-# local media
+# development shenanigans
 media/
+app.py
+notebooks/
 
 # visual studio code
 .vscode/
