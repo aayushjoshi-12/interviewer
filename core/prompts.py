@@ -63,6 +63,6 @@ expereince_interviewer_prompt = ChatPromptTemplate.from_messages(
         ("system", "<job_description>\n{job_description}\n</job_description>"),
         ("system", "<experience>\n{experience}\n</experience>"),
         ("system", "<projects>\n{projects}\n</projects>"),
-        # MessagesPlaceholder("chat_history"),
+        MessagesPlaceholder("chat_history"),
     ]
 )

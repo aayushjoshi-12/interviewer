@@ -1,5 +1,4 @@
-import operator
-from typing import Annotated, List
+from typing import List
 
 from fastapi import UploadFile
 from langchain_core.messages import AIMessage, HumanMessage
@@ -19,17 +18,17 @@ from schemas.llm_responses import Experience, ExperienceInterviewScore, Project
 
 
 class Interview(MessagesState):
-    job_description: str = None
-    resume: str | UploadFile = None  # TODO: fix this error
-    experiences: List[Experience] = []
-    projects: List[Project] = []
-    skills: List[str] = []
-    coding_interview_running: bool = False
-    coding_questions: List[str] = None
-    current_question_index: int = None
-    coding_scores: Annotated[List[int], operator.add] = []
-    coding_interview_score: int = None
-    experience_interview_score: int = None
+    job_description: str
+    resume: str | UploadFile  # TODO: fix this error
+    experiences: List[Experience]
+    projects: List[Project]
+    skills: List[str]
+    coding_interview_running: bool
+    coding_questions: List[str]
+    current_question_index: int
+    coding_scores: List[int]
+    coding_interview_score: int
+    experience_interview_score: int
 
 
 async def parser_node(state: Interview):
@@ -83,7 +82,7 @@ async def coding_interviewer_node(state: Interview):
     if next_index < len(state["coding_questions"]):
         return {
             "messages": [AIMessage(content=state["coding_questions"][next_index])],
-            "coding_scores": [score.score],
+            "coding_scores": state["coding_scores"] + [score.score],
             "current_question_index": next_index,
         }
     else:
@@ -99,20 +98,16 @@ async def experience_interviewer_node(state: Interview):
             "job_description": state["job_description"],
             "experience": state["experiences"],
             "projects": state["projects"],
-            # "chat_history": state["messages"], #TODO: dumpt it as a json into a system message if this doesn't works
+            "chat_history": state["messages"],
         }
     )
-    if isinstance(response, ExperienceInterviewScore):
-        # TODO: some other logic this ain't working
-        # maybe because rn we are not passing history
-        # check with history once
-        return {"experience_interview_score": response.score}
+    if isinstance(response.response, ExperienceInterviewScore):
+        return {"experience_interview_score": response.response.score}
     return {"messages": [AIMessage(content=response.response)]}
 
 
 def candidate_node(state: Interview):
     answer = interrupt("")
-    # TODO: make it so that we can end convo here directly
     return {"messages": [HumanMessage(content=answer)]}
 
 

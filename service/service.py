@@ -8,7 +8,7 @@ from fastapi.responses import StreamingResponse
 from langchain_core.messages import AnyMessage, ChatMessage
 from langchain_core.runnables import RunnableConfig
 from langgraph.graph.state import CompiledStateGraph
-from langgraph.types import Command
+from langgraph.types import Command, StateSnapshot
 
 from core.agent import get_interview_agent
 from schemas import ChatHistory, ChatHistoryInput, StartInput, StateInput, UserInput
@@ -121,7 +121,7 @@ async def stream(user_input: UserInput) -> StreamingResponse:
     return StreamingResponse(message_generator(kwargs), media_type="text/event-stream")
 
 
-@router.post("/history")
+@router.get("/history")
 async def history(history_input: ChatHistoryInput) -> ChatHistory:
     logger.info(f"Retrieving chat history for thread: {history_input.thread_id}")
 
@@ -144,8 +144,8 @@ async def history(history_input: ChatHistoryInput) -> ChatHistory:
         raise HTTPException(status_code=500, detail="Unexpected error")
 
 
-@router.post("/state")
-async def state(state_input: StateInput):
+@router.get("/state")
+async def state(state_input: StateInput) -> StateSnapshot:
     logger.info(f"Ending conversation for thread: {state_input.thread_id}")
 
     agent: CompiledStateGraph = await get_interview_agent()
@@ -156,7 +156,7 @@ async def state(state_input: StateInput):
         logger.info(
             f"Successfully ended conversation for thread: {state_input.thread_id}"
         )
-        return {"state_snapshot": f"{json.dumps(state_snapshot.values)}"}
+        return state_snapshot
     except Exception as e:
         logger.error(
             f"Failed to end conversation for thread {state_input.thread_id}: {str(e)}",
@@ -166,6 +166,7 @@ async def state(state_input: StateInput):
 
 
 # TODO: give description to the endpoints
+
 
 @app.get("/health")
 async def health_check():
